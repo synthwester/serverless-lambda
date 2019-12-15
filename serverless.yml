@@ -1,0 +1,19 @@
+service: serverless-lambda
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: users/welcome
+          method: get
+  fetchSomeData:
+    handler: handler.fetchSomeData
+    events:
+      - http:
+          path: posts/first
+          method: get
