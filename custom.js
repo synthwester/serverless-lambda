@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 // This is default export function
 module.exports = defaultExport = (firstName, lastName) => {
   return `Hello '${firstName} ${lastName}' from 'defaultExport'!`;
@@ -16,9 +18,8 @@ module.exports.secondNamedExport = data => {
 };
 
 // This is async function
-module.exports.fetchData = async url => {
-  // Example URL: https://jsonplaceholder.typicode.com/posts/1
-  const result = await fetch(url);
-  const jsonFormatted = await result.json();
-  return jsonFormatted;
+module.exports.fetchData = async id => {
+  const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
+  const result = await axios.get(url);
+  return result.data;
 };

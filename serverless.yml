@@ -11,9 +11,23 @@ functions:
       - http:
           path: users/welcome
           method: get
-  fetchSomeData:
-    handler: handler.fetchSomeData
+  fetchsome:
+    handler: handler.fetchsome
     events:
       - http:
-          path: posts/first
+          path: users/{id}
           method: get
+          request:
+            parameters:
+              paths:
+                id: true
+  requestdata:
+    handler: handler.requestdata
+    events:
+      - http:
+          path: requestdata/{id}
+          method: post
+          request:
+            parameters:
+              paths:
+                id: true

@@ -1,6 +1,7 @@
 'use strict';
 
 const faker = require('faker');
+const { responseMessage } = require('./responseMessage');
 const { firstNamedExport, secondNamedExport, fetchData } = require('./custom');
 
 const run = () => {
@@ -14,9 +15,32 @@ const run = () => {
   return result;
 };
 
-module.exports.fetchSomeData = async event => {
-  const result = await fetchData('https://jsonplaceholder.typicode.com/posts/1');
+module.exports.requestdata = async event => {
+  let result;
+  try {
+    const request = new Object();
+    request.paramId = event.pathParameters.id;
+    request.requestBody = event.body;
+    // console.log(requestBody);
+    request.queryStringUsername = event.queryStringParameters.username;
+    result = request;
+  } catch (error) {
+    result = error.message;
+  }
 
+  return responseMessage(200, { message: 'Some message', result });
+};
+
+module.exports.fetchsome = async event => {
+  const { id } = event.pathParameters;
+  if (!id) return responseMessage(400, 'Please provide id.');
+
+  let result;
+  try {
+    result = await fetchData(id);
+  } catch (error) {
+    result = error.message;
+  }
   return {
     statusCode: 201,
     body: JSON.stringify(
@@ -32,19 +56,5 @@ module.exports.fetchSomeData = async event => {
 
 module.exports.hello = async event => {
   const runResult = run();
-
-  return {
-    statusCode: 201,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: runResult
-      },
-      null,
-      2
-    )
-  };
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
+  return responseMessage(200, { message: 'Some message', result: runResult });
 };
